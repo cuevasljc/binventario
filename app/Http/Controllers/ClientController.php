@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
-
+use App\Http\Resources\ClientResource;
 class ClientController extends Controller
 {
     /**
@@ -14,7 +14,8 @@ class ClientController extends Controller
      */
     public function index()
     {
-        //
+        $clientes=Client::all();
+        return response()->json(['clientes_patito'=>ClientResource::collection($clientes)]);
     }
 
     /**
@@ -24,7 +25,7 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json(['respuesta'=>'este es el create']);
     }
 
     /**
@@ -35,7 +36,7 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return response()->json(['respuesta'=>'este es el store']);
     }
 
     /**
@@ -46,7 +47,7 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
-        //
+        return response()->json(['respuesta'=>'este es el show']);
     }
 
     /**
@@ -57,7 +58,7 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
-        //
+        return response()->json(['respuesta'=>'este es el edit']);
     }
 
     /**
@@ -69,7 +70,7 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        //
+        return response()->json(['respuesta'=>'este es el update']);
     }
 
     /**
@@ -80,6 +81,6 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        //
+        return response()->json(['respuesta'=>'este es el destroy']);
     }
 }
