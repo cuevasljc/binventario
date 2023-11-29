@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Venta;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-class VentaController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,7 +20,7 @@ class VentaController extends Controller
         $filter = strtoupper($request->get('filter'));
         $ff = $request->get('ff', $filter == '' ? '%%' : '%' . $filter . '%');
 
-        $data = DB::table('ventas')
+        $data = DB::table('users')
             ->select('*')
             ->where($columna, 'like', $ff)
             ->orderBy($columna, $order)
@@ -47,7 +47,7 @@ class VentaController extends Controller
      */
     public function store(Request $request)
     {
-        $model = new Venta(); // Replace "Model" with the actual name of your model
+        $model = new User(); // Replace "Model" with the actual name of your model
         $model->fill($request->all()); // Fill the model with data from the request
         $model->save(); // Save the model to the database
     
@@ -58,10 +58,10 @@ class VentaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Venta  $venta
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Venta $venta)
+    public function show($id)
     {
         //
     }
@@ -69,10 +69,10 @@ class VentaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Venta  $venta
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Venta $venta)
+    public function edit($id)
     {
         //
     }
@@ -81,10 +81,10 @@ class VentaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Venta  $venta
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Venta $venta)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -92,10 +92,10 @@ class VentaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Venta  $venta
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Venta $venta)
+    public function destroy($id)
     {
         //
     }

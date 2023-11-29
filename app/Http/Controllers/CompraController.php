@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Compra;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class CompraController extends Controller
 {
     /**
@@ -12,11 +12,22 @@ class CompraController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
+        $limit = $request->get('limit');
+        $columna = $request->get('columna');
+        $order = $request->get('order');
+        $filter = strtoupper($request->get('filter'));
+        $ff = $request->get('ff', $filter == '' ? '%%' : '%' . $filter . '%');
 
+        $data = DB::table('compras')
+            ->select('*')
+            ->where($columna, 'like', $ff)
+            ->orderBy($columna, $order)
+            ->paginate($limit);
+
+        return response()->json(['data' => $data], 200);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -35,7 +46,12 @@ class CompraController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $model = new Compra(); // Replace "Model" with the actual name of your model
+        $model->fill($request->all()); // Fill the model with data from the request
+        $model->save(); // Save the model to the database
+    
+        $mensaje = "Registrado correctamente";
+        return response()->json(['mensaje'=>$mensaje, 'data'=>$model], 200);
     }
 
     /**

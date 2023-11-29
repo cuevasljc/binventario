@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cdetalle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CdetalleController extends Controller
 {
@@ -12,9 +13,21 @@ class CdetalleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $limit = $request->get('limit');
+        $columna = $request->get('columna');
+        $order = $request->get('order');
+        $filter = strtoupper($request->get('filter'));
+        $ff = $request->get('ff', $filter == '' ? '%%' : '%' . $filter . '%');
+
+        $data = DB::table('cdetalles')
+            ->select('*')
+            ->where($columna, 'like', $ff)
+            ->orderBy($columna, $order)
+            ->paginate($limit);
+
+        return response()->json(['data' => $data], 200);
     }
 
     /**
@@ -35,7 +48,12 @@ class CdetalleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $model = new Cdetalle(); // Replace "Model" with the actual name of your model
+        $model->fill($request->all()); // Fill the model with data from the request
+        $model->save(); // Save the model to the database
+    
+        $mensaje = "Registrado correctamente";
+        return response()->json(['mensaje'=>$mensaje, 'data'=>$model], 200);
     }
 
     /**

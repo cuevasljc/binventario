@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Http\Resources\ClientResource;
+use Illuminate\Support\Facades\DB;
+
 class ClientController extends Controller
 {
     /**
@@ -12,10 +14,21 @@ class ClientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $clientes=Client::all();
-        return response()->json(['clientes_patito'=>ClientResource::collection($clientes)]);
+        $limit = $request->get('limit');
+        $columna = $request->get('columna');
+        $order = $request->get('order');
+        $filter = strtoupper($request->get('filter'));
+        $ff = $request->get('ff', $filter == '' ? '%%' : '%' . $filter . '%');
+
+        $data = DB::table('clients')
+            ->select('*')
+            ->where($columna, 'like', $ff)
+            ->orderBy($columna, $order)
+            ->paginate($limit);
+
+        return response()->json(['data' => $data], 200);
     }
 
     /**
@@ -36,7 +49,32 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        return response()->json(['respuesta'=>'este es el store']);
+        // $request->validate([
+        //     'nombre' => 'required|string|max:255',
+        //     // 'pais' => 'required|string',
+        //     // 'ciudad' => 'required|string',
+        //     // 'direccion' => 'required|string'
+        // ]);
+        // $data = $request->all();
+        // Client::create([
+        //     'nombre' => $data['nombre'],
+        //     'pais' => $data['pais'],
+        //     'ciudad' => $data['ciudad'],
+        //     'direccion' => $data['direccion'],
+        //     'web' => $data['web'],
+        //     'contacto' => $data['contacto'],
+        //     'telefono' => $data['telefono'],
+        //     'celular' => $data['celular'],
+        //     'email' => $data['email'],
+        //     'nit' => $data['nit']
+        // ]);
+        $model = new Client(); // Replace "Model" with the actual name of your model
+        $model->fill($request->all()); // Fill the model with data from the request
+        $model->save(); // Save the model to the database
+    
+
+        $mensaje = "Registrado correctamente";
+        return response()->json(['mensaje'=>$mensaje, 'data'=>$model], 200);
     }
 
     /**

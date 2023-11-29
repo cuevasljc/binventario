@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Cdetalle extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'compra_id',
+        'item_id',
+        'cantidad',
+        'precio',
+        'observacion'
+    ];
 }
