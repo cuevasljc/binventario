@@ -24,7 +24,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $loginData=$request->validate([
-            'email'=> 'email|required',
+            'name'=> 'required',
             'password'=> 'required'
             ]);
         if (!auth()->attempt($loginData)) {
@@ -34,7 +34,7 @@ class AuthController extends Controller
         }
         $accessToken=auth()->user()->createToken('authToken')->accessToken;
         return response([
-            'user'=>auth()->user(),'access_toekn'=> $accessToken
+            'user'=>auth()->user(),'access_token'=> $accessToken
             ]);
         
     }
