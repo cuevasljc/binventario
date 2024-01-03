@@ -4,12 +4,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Hash;
 use App\Models\User;
+use Laravel\Passport\Token;
+use Illuminate\Support\Facades\Auth;
+
 class AuthController extends Controller
 {
     public function register(Request $request)
     {
         $validatedData=$request->validate([
-            "name"  => "required|max:255",
+            "username"  => "required|max:255",
             "email"=> "required|email|unique:users",
             "password"=> "required|confirmed",
         ]);
@@ -24,7 +27,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $loginData=$request->validate([
-            'name'=> 'required',
+            'username'=> 'required',
             'password'=> 'required'
             ]);
         if (!auth()->attempt($loginData)) {
@@ -39,4 +42,17 @@ class AuthController extends Controller
         
     }
 
+    public function logout(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user) {
+            // Revoke all access tokens for the user
+            $user->tokens()->delete();
+
+            return response(['message' => 'Logout exitoso']);
+        } else {
+            return response(['message' => 'No hay usuario autenticado'], 401);
+        }
+    }
 }

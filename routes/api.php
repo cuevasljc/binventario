@@ -11,6 +11,7 @@ use App\Http\Controllers\TraspasoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\VentaController;
+use App\Http\Controllers\RecursosController;
 use App\Models\Vdetalle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +31,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
-
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:api');
 
 Route::group(['middleware' => ['auth:api']], function(){
     Route::apiResource('/client',ClientController::class);
@@ -44,4 +45,8 @@ Route::group(['middleware' => ['auth:api']], function(){
     Route::apiResource('/vdetalle',Vdetalle::class);
     Route::apiResource('/vendor',VendorController::class);
     Route::apiResource('/venta',VentaController::class);
+
+    Route::get('/itemone', [RecursosController::class, 'itemone']);
+    Route::get('/clientone', [RecursosController::class, 'clientone']);
 });
+

@@ -55,6 +55,16 @@ class ItemController extends Controller
         return response()->json(['mensaje'=>$mensaje, 'data'=>$model], 200);
     }
 
+    public function itemone(Request $request)
+    {
+        $model = new Item(); // Replace "Model" with the actual name of your model
+        $model->fill($request->all()); // Fill the model with data from the request
+        $model->save(); // Save the model to the database
+    
+        $mensaje = "Registrado correctamente";
+        return response()->json(['mensaje'=>$mensaje, 'data'=>$model], 200);
+    }
+
     /**
      * Display the specified resource.
      *
